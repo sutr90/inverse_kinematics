@@ -89,6 +89,11 @@ public:
         }
     }
 
+    void move(point pt){
+        segments[0]->move_to(pt);
+    }
+
+    void forward_kinematics(std::vector<double> &angles);
 };
 
 #endif //IK_DRAWABLES_H

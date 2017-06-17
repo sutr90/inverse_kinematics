@@ -46,11 +46,10 @@ tentacle::tentacle(drawable_window &w, const std::vector<int> &lengths) : updata
     for (unsigned i = 0; i < segments.size() - 1; i++) {
         segments[i]->append(segments[i + 1]);
     }
+}
 
-    segments[0]->move_to(point(100, 100));
-
-    segments[0]->rotate(0.2);
-    segments[1]->rotate(-0.4);
-    segments[2]->rotate(0.8);
-    segments[3]->rotate(-0.8);
+void tentacle::forward_kinematics(std::vector<double> &angles) {
+    for (auto i = 0; i < segments.size(); i++) {
+        segments[i]->rotate(angles[i]);
+    }
 }
