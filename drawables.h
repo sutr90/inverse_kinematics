@@ -106,6 +106,8 @@ public:
     }
 
     void forward_kinematics(std::vector<double> &angles);
+
+    double distance_to_target(std::vector<double> &angles, dlib::point target);
 };
 
 #endif //IK_DRAWABLES_H

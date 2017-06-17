@@ -8,6 +8,10 @@ world::world(win &win) : main_win(&win) {
     t->move(point(100, 240));
 //    t->forward_kinematics(rot);
     auto end = t->calculate_endpoint(rot);
+
+    auto dist = t->distance_to_target(rot, point(100,250));
+
+
     items.emplace_back(std::move(t));
 }
 

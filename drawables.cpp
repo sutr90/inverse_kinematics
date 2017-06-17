@@ -77,3 +77,8 @@ dlib::point tentacle::calculate_endpoint(std::vector<double> &angles) {
     }
     return end_point;
 }
+
+double tentacle::distance_to_target(std::vector<double> &angles, dlib::point target) {
+    auto endpoint = calculate_endpoint(angles);
+    return dlib::length(endpoint - target);
+}
