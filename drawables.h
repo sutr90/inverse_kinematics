@@ -83,7 +83,10 @@ public:
 class tentacle : public updatable {
 
     std::vector<std::shared_ptr<segment>> segments;
+
+
 public:
+    dlib::point calculate_endpoint(std::vector<double>& angles);
     tentacle(drawable_window &w, const std::vector<int> &lengths);
 
     void update() {

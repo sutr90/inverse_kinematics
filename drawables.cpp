@@ -13,7 +13,7 @@ void segment::append(std::shared_ptr<segment> seg) {
 
 void segment::rotate(double angle) {
     target_angle = angle;
-    step = (target_angle - actual_angle) / 10;//TODO speed
+    step = (target_angle - actual_angle) / 50;//TODO speed
 }
 
 void segment::move_delta(point delta) {
@@ -64,4 +64,16 @@ void tentacle::forward_kinematics(std::vector<double> &angles) {
     for (unsigned i = 0; i < segments.size(); i++) {
         segments[i]->rotate(angles[i]);
     }
+}
+
+dlib::point tentacle::calculate_endpoint(std::vector<double> &angles) {
+    double sum_angle = 0;
+    point end_point, offset(0, 0);
+
+    for (unsigned i = 0; i < segments.size(); i++) {
+        sum_angle += angles[i];
+        end_point = dlib::rotate_point(segments[i]->from + offset, segments[i]->to + offset, sum_angle);
+        offset = end_point - segments[i]->to;
+    }
+    return end_point;
 }
