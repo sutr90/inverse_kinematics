@@ -1,13 +1,9 @@
 #include "drawables.h"
 
-void line::update() {
-    to = dlib::rotate_point(from, to, 0.1);
-}
+void line::update() {}
 
 void segment::append(std::shared_ptr<segment> seg) {
     this->next = seg.get();
-    seg->previous = this;
-
     seg->move_to(to);
 }
 

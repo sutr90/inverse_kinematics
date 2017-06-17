@@ -58,7 +58,6 @@ public:
 
 
 class segment : public line {
-    segment* previous = nullptr;
     segment* next = nullptr;
 
 public:
