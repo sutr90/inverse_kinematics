@@ -13,20 +13,20 @@ void segment::append(std::shared_ptr<segment> seg) {
 
 
 void segment::rotate(double angle) {
-    auto new_end = dlib::rotate_point(from, to, angle);
-    auto diff = new_end - to;
-    to = new_end;
-    if (next != nullptr) {
-        next->move_delta(diff);
-        next->rotate(angle);
+    auto cursor = this;
+    while (cursor != nullptr) {
+        auto new_end = dlib::rotate_point(cursor->from, cursor->to, angle);
+        auto diff = new_end - cursor->to;
+        cursor->to = new_end;
+        cursor->next->move_delta(diff);
+        cursor->angle += angle;
+        cursor = cursor->next;
     }
-
-    this->angle += angle;
 }
 
 void segment::move_delta(point delta) {
     auto cursor = this;
-    while(cursor != nullptr) {
+    while (cursor != nullptr) {
         cursor->from += delta;
         cursor->to += delta;
         cursor = cursor->next;
@@ -52,4 +52,5 @@ tentacle::tentacle(drawable_window &w, const std::vector<int> &lengths) : updata
     segments[0]->rotate(0.2);
     segments[1]->rotate(-0.4);
     segments[2]->rotate(0.8);
+    segments[3]->rotate(-0.8);
 }
