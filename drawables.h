@@ -60,9 +60,14 @@ public:
 class segment : public line {
     segment* next = nullptr;
 
+    double actual_angle = 0;
+    double target_angle;
+    double step;
+
+    void do_rotate();
 public:
+
     segment(drawable_window &w, int length) : line(w, point(0, 0), point(length, 0)) {};
-    double angle = 0;
 
     void append(std::shared_ptr<segment> seg);
 
@@ -72,6 +77,7 @@ public:
 
     void move_to(point new_point);
 
+    void update();
 };
 
 class tentacle : public updatable {
@@ -80,7 +86,11 @@ class tentacle : public updatable {
 public:
     tentacle(drawable_window &w, const std::vector<int> &lengths);
 
-    void update() {};
+    void update() {
+        for(auto s : segments){
+            s->update();
+        }
+    };
 
     void draw(const canvas &c) const {
         for (auto seg : segments) {

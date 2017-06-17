@@ -2,10 +2,10 @@
 
 world::world(win &win) : main_win(&win) {
     std::vector<int> seg = {100, 100, 100, 100};
-    std::vector<double> rot = {0.2, -0.4, 0.8, -0.6};
+    std::vector<double> rot = {0.4, -0.4, -0.4, 0.4};
 
     auto t = std::make_unique<tentacle>(win, seg);
-    t->move(point(100,100));
+    t->move(point(100, 240));
     t->forward_kinematics(rot);
 
     items.emplace_back(std::move(t));
