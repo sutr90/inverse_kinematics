@@ -25,11 +25,11 @@ void segment::rotate(double angle) {
 }
 
 void segment::move_delta(point delta) {
-    from += delta;
-    to += delta;
-
-    if (next != nullptr) {
-        next->move_delta(delta);
+    auto cursor = this;
+    while(cursor != nullptr) {
+        cursor->from += delta;
+        cursor->to += delta;
+        cursor = cursor->next;
     }
 }
 
