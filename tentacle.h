@@ -12,7 +12,7 @@ class tentacle : public updatable, public dlib::drawable {
 
     void inverse_kinematics(dlib::point target, std::vector<double> &angles);
 
-    double sampling_distance = 0.01;
+    double sampling_distance = 1;
 
     double learning_rate = 0.001;
 

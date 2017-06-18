@@ -2,7 +2,7 @@
 #include "tentacle.h"
 
 world::world(dlib::drawable_window &win) {
-    std::vector<int> seg = {100, 100, 100, 100};
+    std::vector<int> seg(50, 10);
     auto t = std::make_unique<tentacle>(win, seg);
     t->move(dlib::point(320, 240));
 
