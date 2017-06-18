@@ -28,7 +28,6 @@ double tentacle::distance_to_target(std::vector<double> &angles) {
 double tentacle::partial_gradient(std::vector<double> &angles, int i) {
     double angle = angles[i];
 
-    // Gradient : [F(x+SamplingDistance) - F(x)] / h
     double f_x = error_function(angles);
 
     angles[i] += sampling_distance;
@@ -36,7 +35,6 @@ double tentacle::partial_gradient(std::vector<double> &angles, int i) {
 
     double gradient = (f_x_plus_d - f_x) / sampling_distance;
 
-    // Restores
     angles[i] = angle;
 
     return gradient;
@@ -52,8 +50,9 @@ void tentacle::inverse_kinematics(std::vector<double> &angles) {
         double gradient = partial_gradient(angles, i);
         angles[i] -= learning_rate * gradient;
 
-        angles[i] = std::min(dlib::pi, std::max(angles[i], -dlib::pi));
-
+        if(i != 0) {
+            angles[i] = std::min(dlib::pi/8, std::max(angles[i], -dlib::pi/8));
+        }
         // Early termination
         if (error_function(angles) < distance_threshold)
             return;
