@@ -34,18 +34,20 @@ class tentacle : public updatable {
 
     void inverse_kinematics(dlib::point target, std::vector<double> &angles);
 
-    double sampling_distance = 0.1;
+    double sampling_distance = 0.01;
 
-    double learning_rate = 0.1;
+    double learning_rate = 0.001;
 
-    double distance_threshold = 10;
+    double distance_threshold = 2;
 
     std::vector<double> angles;
 
     point origin;
 
     std::vector<int> lengths;
+
     void draw(const canvas &c) const;
+
 public:
 
     dlib::point forward_kinematics(std::vector<double> &angles);
@@ -53,8 +55,13 @@ public:
     tentacle(drawable_window &w, const std::vector<int> &len);
 
     void update();
+
     void move(point pt) {
         origin = pt;
+    }
+
+    ~tentacle() {
+        disable_events();
     }
 };
 
