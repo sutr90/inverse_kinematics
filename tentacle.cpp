@@ -20,19 +20,19 @@ dlib::point tentacle::forward_kinematics(std::vector<double> &angles) {
     return center;
 }
 
-double tentacle::distance_to_target(dlib::point target, std::vector<double> &angles) {
+double tentacle::distance_to_target(std::vector<double> &angles) {
     auto endpoint = forward_kinematics(angles);
     return dlib::length(endpoint - target);
 }
 
-double tentacle::partial_gradient(dlib::point target, std::vector<double> &angles, int i) {
+double tentacle::partial_gradient(std::vector<double> &angles, int i) {
     double angle = angles[i];
 
     // Gradient : [F(x+SamplingDistance) - F(x)] / h
-    double f_x = distance_to_target(target, angles);
+    double f_x = error_function(angles);
 
     angles[i] += sampling_distance;
-    double f_x_plus_d = distance_to_target(target, angles);
+    double f_x_plus_d = error_function(angles);
 
     double gradient = (f_x_plus_d - f_x) / sampling_distance;
 
@@ -42,18 +42,20 @@ double tentacle::partial_gradient(dlib::point target, std::vector<double> &angle
     return gradient;
 }
 
-void tentacle::inverse_kinematics(dlib::point target, std::vector<double> &angles) {
-    if (distance_to_target(target, angles) < distance_threshold)
+void tentacle::inverse_kinematics(std::vector<double> &angles) {
+    if (error_function(angles) < distance_threshold)
         return;
 
     for (int i = angles.size() - 1; i >= 0; i--) {
         // Gradient descent
         // Update : Solution -= LearningRate * Gradient
-        double gradient = partial_gradient(target, angles, i);
+        double gradient = partial_gradient(angles, i);
         angles[i] -= learning_rate * gradient;
 
+        angles[i] = std::min(dlib::pi, std::max(angles[i], -dlib::pi));
+
         // Early termination
-        if (distance_to_target(target, angles) < distance_threshold)
+        if (error_function(angles) < distance_threshold)
             return;
     }
 }
@@ -75,7 +77,7 @@ void tentacle::draw(const dlib::canvas &c) const {
 }
 
 void tentacle::update() {
-    inverse_kinematics(target, angles);
+    inverse_kinematics(angles);
 }
 
 void tentacle::on_mouse_down(unsigned long btn, unsigned long, long x, long y, bool is_double_click) {
@@ -83,5 +85,9 @@ void tentacle::on_mouse_down(unsigned long btn, unsigned long, long x, long y, b
         target.x() = x;
         target.y() = y;
     }
+}
+
+double tentacle::error_function(std::vector<double> &angles) {
+    return distance_to_target(angles);
 }
 

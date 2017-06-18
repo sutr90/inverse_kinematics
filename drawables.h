@@ -21,6 +21,14 @@ public:
         wrld->on_mouse_down(btn, state, x, y, is_double_click);
     }
 
+    void on_mouse_move (
+            unsigned long state,
+            long x,
+            long y
+    ){
+        wrld->on_mouse_down(1, state, x, y, true);
+    }
+
     ~win() {
         close_window();
     }
