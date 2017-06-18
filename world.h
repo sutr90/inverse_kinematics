@@ -1,18 +1,17 @@
 #ifndef IK_WORLD_H
 #define IK_WORLD_H
 
+#include "updatable.h"
 
-#include "drawables.h"
-
-class world {
-
-    win* main_win;
+class world : public updatable {
 public:
-    world(win &win);
+    world(dlib::drawable_window &win);
 
     void update();
 
     std::vector<std::unique_ptr<updatable>> items;
+
+    void on_mouse_down(unsigned long btn, unsigned long state, long x, long y, bool is_double_click);
 };
 
 

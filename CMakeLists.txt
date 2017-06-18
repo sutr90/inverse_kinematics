@@ -17,6 +17,6 @@ endif (UNIX)
 
 set(LIBS ${DLIB_LIBRARY} ${LIBS})
 
-set(SOURCE_FILES main.cpp world.cpp world.h drawables.h drawables.cpp)
+set(SOURCE_FILES main.cpp world.cpp world.h drawables.h drawables.cpp updatable.h tentacle.cpp tentacle.h)
 add_executable(ik ${SOURCE_FILES})
 target_link_libraries(ik ${LIBS})

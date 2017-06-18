@@ -2,22 +2,23 @@
 #define IK_DRAWABLES_H
 
 #include <dlib/gui_widgets.h>
+#include "updatable.h"
+#include "world.h"
 
-using namespace std;
-using namespace dlib;
-
-struct updatable : public drawable {
-    updatable(drawable_window &w) : drawable(w) {}
-
-    virtual void update() = 0;
-};
-
-
-class win : public drawable_window {
+class win : public dlib::drawable_window {
+    world *wrld;
 public:
     win() {
         set_size(640, 480);
         show();
+    }
+
+    void set_world(world *wrld) {
+        this->wrld = wrld;
+    }
+
+    void on_mouse_down(unsigned long btn, unsigned long state, long x, long y, bool is_double_click) {
+        wrld->on_mouse_down(btn, state, x, y, is_double_click);
     }
 
     ~win() {
@@ -26,43 +27,6 @@ public:
 };
 
 
-class tentacle : public updatable {
 
-    double distance_to_target(dlib::point target, std::vector<double> &angles);
-
-    double partial_gradient(dlib::point target, std::vector<double> &angles, int i);
-
-    void inverse_kinematics(dlib::point target, std::vector<double> &angles);
-
-    double sampling_distance = 0.01;
-
-    double learning_rate = 0.001;
-
-    double distance_threshold = 2;
-
-    std::vector<double> angles;
-
-    point origin;
-
-    std::vector<int> lengths;
-
-    void draw(const canvas &c) const;
-
-public:
-
-    dlib::point forward_kinematics(std::vector<double> &angles);
-
-    tentacle(drawable_window &w, const std::vector<int> &len);
-
-    void update();
-
-    void move(point pt) {
-        origin = pt;
-    }
-
-    ~tentacle() {
-        disable_events();
-    }
-};
 
 #endif //IK_DRAWABLES_H

@@ -1,6 +1,7 @@
 
 #include <dlib/uintn.h>
 #include "world.h"
+#include "drawables.h"
 
 using namespace dlib;
 
@@ -11,12 +12,14 @@ int main() {
     win my_window;
 
     timestamper ts;
-    world world(my_window);
+    world my_world(my_window);
+    my_window.set_world(&my_world);
 
     while (!my_window.is_closed()) {
         auto start = ts.get_timestamp();
 
-        world.update();
+        my_world.update();
+        my_window.invalidate_rectangle(rectangle(0, 0, 640, 480));
 
         auto stop = ts.get_timestamp();
 

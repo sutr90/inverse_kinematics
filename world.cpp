@@ -1,9 +1,10 @@
 #include "world.h"
+#include "tentacle.h"
 
-world::world(win &win) : main_win(&win) {
-    std::vector<int> seg = {100,100,100,100};
+world::world(dlib::drawable_window &win) {
+    std::vector<int> seg = {100, 100, 100, 100};
     auto t = std::make_unique<tentacle>(win, seg);
-    t->move(point(320,240));
+    t->move(dlib::point(320, 240));
 
     items.emplace_back(std::move(t));
 }
@@ -12,6 +13,10 @@ void world::update() {
     for (auto &item : items) {
         item->update();
     }
+}
 
-    main_win->invalidate_rectangle(rectangle(0, 0, 640, 480));
+void world::on_mouse_down(unsigned long btn, unsigned long state, long x, long y, bool is_double_click) {
+    for (auto &item : items) {
+        item->on_mouse_down(btn, state, x, y, is_double_click);
+    }
 }
