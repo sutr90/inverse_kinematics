@@ -8,7 +8,7 @@ dlib::point tentacle::forward_kinematics(std::vector<double> &angles) {
     double sum_angle = 0;
     point center = origin, end_point;
 
-    for(unsigned i = 0; i < angles.size(); i++) {
+    for (unsigned i = 0; i < angles.size(); i++) {
         sum_angle += angles[i];
         end_point = center;
         end_point.x() += lengths[i];
@@ -58,10 +58,22 @@ void tentacle::inverse_kinematics(dlib::point target, std::vector<double> &angle
 }
 
 void tentacle::draw(const canvas &c) const {
+    double sum_angle = 0;
+    point center = origin, end_point;
 
+    for (unsigned i = 0; i < angles.size(); i++) {
+        sum_angle += angles[i];
+        end_point = center;
+        end_point.x() += lengths[i];
+
+        center = dlib::rotate_point(center, end_point, sum_angle);
+
+        draw_line(c, center, end_point);
+    }
 }
 
 void tentacle::update() {
-//    inverse_kinematics(target, angles);
+    point target;
+    inverse_kinematics(target, angles);
 }
 

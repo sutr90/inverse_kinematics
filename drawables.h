@@ -45,14 +45,14 @@ class tentacle : public updatable {
     point origin;
 
     std::vector<int> lengths;
+    void draw(const canvas &c) const;
 public:
+
     dlib::point forward_kinematics(std::vector<double> &angles);
 
     tentacle(drawable_window &w, const std::vector<int> &len);
 
     void update();
-
-    void draw(const canvas &c) const ;
     void move(point pt) {
         origin = pt;
     }
