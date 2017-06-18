@@ -24,7 +24,7 @@ int main() {
         auto stop = ts.get_timestamp();
 
         unsigned long sleep_time = (unsigned long) ((FRAME_TIME - (stop - start)) / 1000);
-        if (sleep_time > 0) {
+        if (sleep_time > 0 && sleep_time < FRAME_TIME) {
             dlib::sleep(sleep_time);
         }
     }
