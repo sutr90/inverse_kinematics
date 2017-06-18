@@ -45,7 +45,7 @@ void segment::do_rotate() {
 void segment::update() {
     auto diff = RAD_TO_DEG(actual_angle) - RAD_TO_DEG(target_angle);
     diff = MYMOD((diff + 180), 360) - 180;
-    if (std::abs(diff) > 1) {
+    if (std::abs(diff) > 0) {
         do_rotate();
     }
 }
@@ -78,7 +78,41 @@ dlib::point tentacle::calculate_endpoint(std::vector<double> &angles) {
     return end_point;
 }
 
-double tentacle::distance_to_target(std::vector<double> &angles, dlib::point target) {
+double tentacle::distance_to_target(dlib::point target, std::vector<double> &angles) {
     auto endpoint = calculate_endpoint(angles);
     return dlib::length(endpoint - target);
 }
+
+double tentacle::partial_gradient(dlib::point target, std::vector<double> &angles, int i) {
+    double angle = angles[i];
+
+    // Gradient : [F(x+SamplingDistance) - F(x)] / h
+    double f_x = distance_to_target(target, angles);
+
+    angles[i] += sampling_distance;
+    double f_x_plus_d = distance_to_target(target, angles);
+
+    double gradient = (f_x_plus_d - f_x) / sampling_distance;
+
+    // Restores
+    angles[i] = angle;
+
+    return gradient;
+}
+
+void tentacle::inverse_kinematics(dlib::point target, std::vector<double> &angles) {
+    if (distance_to_target(target, angles) < distance_threshold)
+        return;
+
+    for (int i = segments.size() - 1; i >= 0; i--) {
+        // Gradient descent
+        // Update : Solution -= LearningRate * Gradient
+        double gradient = partial_gradient(target, angles, i);
+        angles[i] -= learning_rate * gradient;
+
+        // Early termination
+        if (distance_to_target(target, angles) < distance_threshold)
+            return;
+    }
+}
+

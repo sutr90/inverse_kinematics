@@ -58,13 +58,14 @@ public:
 
 
 class segment : public line {
-    segment* next = nullptr;
+    segment *next = nullptr;
 
     double actual_angle = 0;
     double target_angle;
     double step;
 
     void do_rotate();
+
 public:
 
     segment(drawable_window &w, int length) : line(w, point(0, 0), point(length, 0)) {};
@@ -86,13 +87,16 @@ class tentacle : public updatable {
 
 
 public:
-    dlib::point calculate_endpoint(std::vector<double>& angles);
+    dlib::point calculate_endpoint(std::vector<double> &angles);
+
     tentacle(drawable_window &w, const std::vector<int> &lengths);
 
     void update() {
-        for(auto s : segments){
+        for (auto s : segments) {
             s->update();
         }
+
+        inverse_kinematics(target, angles);
     };
 
     void draw(const canvas &c) const {
@@ -101,13 +105,23 @@ public:
         }
     }
 
-    void move(point pt){
+    void move(point pt) {
         segments[0]->move_to(pt);
     }
 
     void forward_kinematics(std::vector<double> &angles);
 
-    double distance_to_target(std::vector<double> &angles, dlib::point target);
+    double distance_to_target(dlib::point target, std::vector<double> &angles);
+
+    double partial_gradient(dlib::point target, std::vector<double> &angles, int i);
+
+    void inverse_kinematics(dlib::point target, std::vector<double> &angles);
+
+    double sampling_distance = 0.1;
+
+    double learning_rate = 0.1;
+
+    double distance_threshold = 10;
 };
 
 #endif //IK_DRAWABLES_H
