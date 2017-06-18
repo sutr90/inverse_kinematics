@@ -75,5 +75,13 @@ void tentacle::draw(const dlib::canvas &c) const {
 }
 
 void tentacle::update() {
-    inverse_kinematics(origin, angles);
+    inverse_kinematics(target, angles);
 }
+
+void tentacle::on_mouse_down(unsigned long btn, unsigned long, long x, long y, bool is_double_click) {
+    if (btn == 1 && is_double_click) {
+        target.x() = x;
+        target.y() = y;
+    }
+}
+

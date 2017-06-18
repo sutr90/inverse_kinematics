@@ -21,6 +21,7 @@ class tentacle : public updatable, public dlib::drawable {
     std::vector<double> angles;
 
     dlib::point origin;
+    dlib::point target;
 
     std::vector<int> lengths;
 
@@ -41,6 +42,8 @@ public:
     ~tentacle() {
         disable_events();
     }
+
+    void on_mouse_down(unsigned long btn, unsigned long state, long x, long y, bool is_double_click) override;
 };
 
 

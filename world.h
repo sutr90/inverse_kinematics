@@ -11,7 +11,7 @@ public:
 
     std::vector<std::unique_ptr<updatable>> items;
 
-    void on_mouse_down(unsigned long btn, unsigned long state, long x, long y, bool is_double_click);
+    void on_mouse_down(unsigned long btn, unsigned long state, long x, long y, bool is_double_click) override;
 };
 
 
